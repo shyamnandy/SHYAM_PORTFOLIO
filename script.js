@@ -17,15 +17,27 @@ const hamburger = document.getElementById('hamburger');
 const mobileMenu = document.getElementById('mobileMenu');
 
 hamburger.addEventListener('click', () => {
-  mobileMenu.classList.toggle('open');
+  const isOpen = mobileMenu.classList.toggle('open');
+  hamburger.setAttribute('aria-expanded', isOpen);
 });
 
 // Close mobile menu on link click
 document.querySelectorAll('.mob-link').forEach(link => {
   link.addEventListener('click', () => {
     mobileMenu.classList.remove('open');
+    hamburger.setAttribute('aria-expanded', 'false');
   });
 });
+
+// Close mobile menu when tapping outside
+document.addEventListener('touchstart', e => {
+  if (mobileMenu.classList.contains('open') &&
+      !mobileMenu.contains(e.target) &&
+      !hamburger.contains(e.target)) {
+    mobileMenu.classList.remove('open');
+    hamburger.setAttribute('aria-expanded', 'false');
+  }
+}, { passive: true });
 
 // ---- SCROLL REVEAL ANIMATION ----
 const revealElements = document.querySelectorAll('.reveal');
@@ -127,48 +139,52 @@ const sectionObserver = new IntersectionObserver((entries) => {
 
 sections.forEach(s => sectionObserver.observe(s));
 
-// ---- SMOOTH CURSOR TRAIL (subtle) ----
-const trail = [];
-const TRAIL_COUNT = 8;
+// ---- SMOOTH CURSOR TRAIL (desktop only) ----
+const isTouchDevice = () => window.matchMedia('(hover: none) and (pointer: coarse)').matches;
 
-for (let i = 0; i < TRAIL_COUNT; i++) {
-  const dot = document.createElement('div');
-  dot.style.cssText = `
-    position: fixed;
-    width: ${6 - i * 0.5}px;
-    height: ${6 - i * 0.5}px;
-    background: rgba(139,92,246,${0.4 - i * 0.04});
-    border-radius: 50%;
-    pointer-events: none;
-    z-index: 9999;
-    transition: transform 0.1s ease;
-    mix-blend-mode: screen;
-    will-change: transform;
-  `;
-  document.body.appendChild(dot);
-  trail.push({ el: dot, x: -100, y: -100 });
-}
+if (!isTouchDevice()) {
+  const trail = [];
+  const TRAIL_COUNT = 8;
 
-let mouseX = -100, mouseY = -100;
+  for (let i = 0; i < TRAIL_COUNT; i++) {
+    const dot = document.createElement('div');
+    dot.style.cssText = `
+      position: fixed;
+      width: ${6 - i * 0.5}px;
+      height: ${6 - i * 0.5}px;
+      background: rgba(139,92,246,${0.4 - i * 0.04});
+      border-radius: 50%;
+      pointer-events: none;
+      z-index: 9999;
+      transition: transform 0.1s ease;
+      mix-blend-mode: screen;
+      will-change: transform;
+    `;
+    document.body.appendChild(dot);
+    trail.push({ el: dot, x: -100, y: -100 });
+  }
 
-document.addEventListener('mousemove', e => {
-  mouseX = e.clientX;
-  mouseY = e.clientY;
-});
+  let mouseX = -100, mouseY = -100;
 
-function animateTrail() {
-  let x = mouseX, y = mouseY;
-  trail.forEach((dot, i) => {
-    dot.x += (x - dot.x) * (0.5 - i * 0.04);
-    dot.y += (y - dot.y) * (0.5 - i * 0.04);
-    dot.el.style.left = dot.x - dot.el.offsetWidth / 2 + 'px';
-    dot.el.style.top = dot.y - dot.el.offsetHeight / 2 + 'px';
-    x = dot.x;
-    y = dot.y;
+  document.addEventListener('mousemove', e => {
+    mouseX = e.clientX;
+    mouseY = e.clientY;
   });
-  requestAnimationFrame(animateTrail);
+
+  function animateTrail() {
+    let x = mouseX, y = mouseY;
+    trail.forEach((dot, i) => {
+      dot.x += (x - dot.x) * (0.5 - i * 0.04);
+      dot.y += (y - dot.y) * (0.5 - i * 0.04);
+      dot.el.style.left = dot.x - dot.el.offsetWidth / 2 + 'px';
+      dot.el.style.top = dot.y - dot.el.offsetHeight / 2 + 'px';
+      x = dot.x;
+      y = dot.y;
+    });
+    requestAnimationFrame(animateTrail);
+  }
+  animateTrail();
 }
-animateTrail();
 
 // ---- STAT COUNTER ANIMATION ----
 function animateCounter(el, target, suffix = '') {

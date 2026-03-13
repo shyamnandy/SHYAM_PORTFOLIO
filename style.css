@@ -36,7 +36,12 @@ body {
   font-size: 16px;
   line-height: 1.7;
   overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
+
+/* Remove tap highlight on mobile */
+a, button { -webkit-tap-highlight-color: transparent; }
 
 a { text-decoration: none; color: inherit; }
 ul { list-style: none; }
@@ -58,6 +63,7 @@ img { max-width: 100%; }
   background: var(--bg-card);
   border: 1px solid var(--border);
   border-radius: var(--radius);
+  -webkit-backdrop-filter: blur(12px);
   backdrop-filter: blur(12px);
   transition: border-color .3s, background .3s, transform .3s, box-shadow .3s;
 }
@@ -192,6 +198,7 @@ img { max-width: 100%; }
 #navbar.scrolled {
   background: rgba(8,11,20,0.85);
   border-bottom: 1px solid var(--border);
+  -webkit-backdrop-filter: blur(20px);
   backdrop-filter: blur(20px);
 }
 .nav-inner {
@@ -228,7 +235,7 @@ img { max-width: 100%; }
 }
 .nav-links .cta-btn:hover { background: rgba(139,92,246,0.25); border-color: var(--purple); color: white; }
 
-.hamburger { display: none; flex-direction: column; gap: 5px; background: none; border: none; cursor: pointer; padding: 4px; }
+.hamburger { display: none; flex-direction: column; gap: 5px; background: none; border: none; cursor: pointer; padding: 8px; min-width: 44px; min-height: 44px; justify-content: center; align-items: center; }
 .hamburger span { display: block; width: 24px; height: 2px; background: var(--text-primary); border-radius: 2px; transition: transform .3s, opacity .3s; }
 
 .mobile-menu {
@@ -242,6 +249,7 @@ img { max-width: 100%; }
   flex-direction: column;
   gap: 16px;
   z-index: 999;
+  -webkit-backdrop-filter: blur(20px);
   backdrop-filter: blur(20px);
 }
 .mobile-menu.open { display: flex; }
@@ -725,5 +733,15 @@ img { max-width: 100%; }
   .exp-header { flex-direction: column; }
   .exp-meta { text-align: left; }
   .about-stats { gap: 12px; }
-  .hero-socials a { width: 38px; height: 38px; }
+  .hero-socials a { width: 44px; height: 44px; }
+  /* Hide manual line breaks on small screens so text reflows naturally */
+  .hero-sub br { display: none; }
+  /* Bigger tap targets for nav links */
+  .mob-link { padding: 12px 0; font-size: 17px; }
+  /* Prevent card overflow on very small screens */
+  .about-card { max-width: 100%; }
+  .contact-card p { word-break: break-word; }
+  /* Stack hero buttons fully on tiny screens */
+  .hero-actions { flex-direction: column; align-items: center; }
+  .btn-primary, .btn-ghost { width: 100%; max-width: 280px; text-align: center; }
 }
