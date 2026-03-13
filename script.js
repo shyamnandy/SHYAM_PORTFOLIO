@@ -32,8 +32,8 @@ document.querySelectorAll('.mob-link').forEach(link => {
 // Close mobile menu when tapping outside
 document.addEventListener('touchstart', e => {
   if (mobileMenu.classList.contains('open') &&
-      !mobileMenu.contains(e.target) &&
-      !hamburger.contains(e.target)) {
+    !mobileMenu.contains(e.target) &&
+    !hamburger.contains(e.target)) {
     mobileMenu.classList.remove('open');
     hamburger.setAttribute('aria-expanded', 'false');
   }
