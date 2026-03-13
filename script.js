@@ -227,10 +227,11 @@ if (aboutStats) statsObserver.observe(aboutStats);
 const heroTitle = document.querySelector('.hero-title');
 if (heroTitle) {
   const titles = [
-    'AI Developer & Full-Stack Engineer',
-    'NLP Pipeline Builder',
-    'Cloud Solutions Enthusiast',
-    'Open Source Contributor'
+    'Full Stack Developer',
+    'AI / ML Enthusiast',
+    'Software Developer',
+    'Passionate Problem Solver',
+    'Hackathon Finalist'
   ];
   let titleIndex = 0, charIndex = 0, isDeleting = false;
 
